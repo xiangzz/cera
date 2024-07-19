@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Don't forget to set system property
+-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
+or
+-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.BasicAsyncLoggerContextSelector
+     to make all loggers asynchronous. -->
+
+<Configuration status="WARN">
+    <Appenders>
+        <!-- Async Loggers will auto-flush in batches, so switch off immediateFlush. -->
+        <RandomAccessFile name="RandomAccessFile" fileName="async.log" immediateFlush="true" append="false">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] - %l - %m %ex%n</Pattern>
+            </PatternLayout>
+        </RandomAccessFile>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] - %l - %m %ex%n</Pattern>
+            </PatternLayout>
+        </Console>
+    </Appenders>
+    <Loggers>
+<!--        <Root level="info" includeLocation="true">-->
+<!--            <AppenderRef ref="RandomAccessFile"/>-->
+<!--        </Root>-->
+        <AsyncLogger name="asyncLoggerInfo" additivity="FALSE" level="info" includeLocation="True">
+            <appender-ref ref="RandomAccessFile" />
+            <appender-ref ref="Console" />
+        </AsyncLogger>
+
+        <Root level="info" includeLocation="true">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RandomAccessFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
